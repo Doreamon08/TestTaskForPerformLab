@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.io.*;
+import java.util.*;
+
 public class task4 {
 
     public static void main(String[] args) {
@@ -16,9 +19,10 @@ public class task4 {
         }
 
         String numsFile = args[0];
-        int minStepsResult = -1;
+        int minStepsResult = 0;
 
         try (BufferedReader numsReader = new BufferedReader(new FileReader(numsFile))) {
+
             List<Integer> numbersList = new ArrayList<>();
             String line;
 
@@ -27,29 +31,17 @@ public class task4 {
             }
 
             int[] nums = numbersList.stream().mapToInt(Integer::intValue).toArray();
+            Arrays.sort(nums);
+            int median = nums[nums.length / 2];
 
-            for (int i = 0; i < nums.length; i++) {
-
-                int minSteps = 0;
-                for (int j = 0; j < nums.length; j++) {
-
-                    if (i == j)
-                        continue;
-                    minSteps += Math.abs(nums[i] - nums[j]);
-
-                }
-
-                if (minSteps < minStepsResult || minStepsResult <= 0)
-                    minStepsResult = minSteps;
-
+            for (int num : nums) {
+                minStepsResult += Math.abs(num - median);
             }
 
         } catch (IOException e) {
-            System.err.println("Error reading files: " + e.getMessage());
+            System.err.println("Error reading file: " + e.getMessage());
         }
 
         System.out.println(minStepsResult);
-
     }
-
 }
